@@ -1,2 +1,2 @@
 # Airline-Reservation-Web-App
-![ERD image](./AirlineDatabase.png)
+![ERD image](./airlinedatabase.png)
