@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import useFetch from "./useFetch";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const BlogDetails = () => {
+const FlightDetails = () => {
   const { id } = useParams();
   console.log(id);
   const history = useHistory();
@@ -37,4 +37,4 @@ const BlogDetails = () => {
   );
 };
 
-export default BlogDetails;
+export default FlightDetails;

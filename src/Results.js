@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
-const BlogList = ({ blogs, title }) => {
+const Results = ({ destination }) => {
   return (
     <div className="blog-list">
-      <h1>{title}</h1>
-
-      {blogs.map((blog) => (
+      hi
+      {/* TODO: receive destination and use fetch to return results */}
+      {/* {blogs.map((blog) => (
         <div className="blog-preview" key={blog.id}>          
           <Link to={`/blogs/${blog.id}`}>
             <h2>{blog.title}</h2>
@@ -14,8 +14,8 @@ const BlogList = ({ blogs, title }) => {
             <p>Written by {blog.author}</p>
           </Link>
         </div>
-      ))}
+      ))} */}
     </div>
   );
 };
-export default BlogList;
+export default Results;
