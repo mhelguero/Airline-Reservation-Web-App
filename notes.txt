@@ -1,0 +1,1063 @@
+package.json: lists all dependencies required
+"npm install"
+    - installs all dependencies from package.json into node_modules folder
+    
+in public/:
+index.html contains div with id="root"
+
+in src/:
+index.js has "root" which contains App component
+App.js contains App component's content
+
+https://www.youtube.com/watch?v=9D1x7-2FmTA&list=PL4cUxeGkcC9gZD-Tvwfod2gaISzfRiP9d&index=3
+
+----------------------------------------------------------------
+COMPONENTS AND TEMPLATES
+
+component is function that returns jsx template and is exported
+    - to make component, make new js file in src/ and use 'sfc' snippet
+
+each component has a corresponding template(html-like code in js) and logic
+- App.js is jsx; contains html-like code
+
+- instead of "class=" like in html, jsx uses camel-case versions of attribs
+    like className=
+    - after rendered, className= is turned into regular class=
+
+- to "escape" html-like code inside return() and into js, write js code inside brackets:
+return (
+    <h1>
+        {player.name}
+    </h1>
+);
+
+- dont need to escpae into js to write condition statements before return():
+let content
+if (isLoggedIn){
+    content = <AdminPanel />;
+}
+else{
+    content = <LoginForm />;
+}
+
+return(
+    <>
+        {content}
+    </>
+)
+
+or, write inside jsx (return()):
+return(
+    <>
+        {isLoggedIn ? (<AdminPanel />) : (<LoginForm />)}
+    </>
+)
+
+
+
+EX: in App.js:
+function App() {
+  const TITLE = 'Welcome to the new blog';
+  const LIKES = 69;
+  const PERSON = {
+    name: 'Miguel',
+    age: 26
+  }
+
+  return (
+    <div className="App">
+      <div className="content">
+        <h1>{TITLE}</h1>
+        <p>Liked {LIKES} times.</p>
+        <p>{PERSON.name}</p>
+      </div>
+    </div>
+  );
+}
+export default App;
+- output:
+Welcome to the new blog
+    Liked 69 times.
+        Miguel
+
+
+- import new components into App.js:
+import Navbar from './Navbar';
+
+function App() {  
+  return (
+    <div className="App">
+      <Navbar />
+      <div className="content">
+        <Home />
+      </div>      
+      
+    </div>
+  );
+}
+
+- in-line styling:
+<div className="links">
+    <a href="/">Home</a>
+    <a href="/create" style={{
+        color: "#70870c",
+        backgroundColor: 'green'
+    }}>New Blog</a>
+</div>
+
+
+------------------------------------------------------------
+CLICK EVENTS
+
+const Home = () => {
+  const handleClick = () => {
+    console.log('yo');
+  };
+  return (
+    <div className="home">
+      <h2>Homepage</h2>
+      <button onClick={handleClick}>Click Me!</button>
+    </div>
+  );
+};
+- use {} to use js variables
+
+
+const Home = () => {
+  const handleClick = (name, e) => {
+    console.log("yo "+name, e);
+
+  };
+
+  return (
+    <div className="home">
+      <h2>Homepage</h2>
+      <button onClick={(e) =>{
+        handleClick('Miguel', e);
+        
+      }}>Click Me!</button>
+    </div>
+  );
+};
+- if you put {handleClick()}, function will run when page loads
+- need to call function inside bubble function instead
+- functions automatically have an event argument when called, can use it in
+    called function, here named "e"
+- output is 
+yo Miguel
+SyntheticBaseEvent {...}
+
+------------------------------------------------------------
+USING STATE
+
+let name = "mario";
+  const handleClick = () => {
+    name = "luigi";
+    console.log(name);
+  };
+
+return (
+<div className="home">
+    <h2>Homepage</h2>
+    <p>{name}</p>
+    <button onClick={handleClick}>Click Me!</button>
+</div>
+);
+- changes name to luigi when clicked and outpute to console,
+    but changes do not last after clicking, need to use state hook
+import {useState} from 'react';
+
+const Home = () => {
+  const [name, setName] = useState('Mario');
+  ...
+- name: variable that holds value inside useState function
+- setName: function that will be able to change the value
+
+ex:
+const [name, setName] = useState('Mario');
+
+const handleClick = () => {
+(name == 'Mario') ? setName('Luigi') : setName('Mario');
+};
+
+return (
+<div className="home">
+    <h2>Homepage</h2>
+    <p>{name}</p>
+    <button onClick={handleClick}>Click Me!</button>
+</div>
+);
+- output switches btwn:
+Homepage                Homepage
+Mario                   Luigi
+Click Me!               Click Me!
+
+--------------------------------------------------
+OUTPUTTING LISTS
+
+
+const Home = () => {
+  const [blogs, setBlogs] = useState([
+    {title: 'My new website', body:'lorem ipsum...', author: 'Miguel', id: 1},
+    {title: 'First things first', body:'lorem ipsum...', author: 'Israel', id: 2},
+    {title: 'Web dev top tips', body:'lorem ipsum...', author: 'Helguero', id: 3},
+
+  ]);
+  return (
+    <div className="home">
+      {blogs.map((blog)=>(
+        <div className="blog-preview" key={blog.id}>
+            <h2>{blog.title}</h2>
+            <p>Written by {blog.author}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+- .map(): cycles through array and does something with each elem
+        - similar to foreach()
+- key: unique attrib of each object in array so that React can keep track of those objects
+        if data changed/removed/added
+        - usually an "id" attrib
+
+--------------------------------------------------
+PROPS
+
+prop: component that is reusable anywhere in project
+  - ex: blogs on homepage but then filter out via search
+
+in Home.js:
+<BlogList blogs={blogs}/>
+
+in BlogList.js:
+const BlogList = (props) => {
+    const blogs = props.blogs;
+  return (
+    <div className="blog-list">
+      {blogs.map((blog) => (
+        <div className="blog-preview" key={blog.id}>
+          <h2>{blog.title}</h2>
+          <p>Written by {blog.author}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+  - props is default arg that is an obj which holds props as
+    key-value pairs
+  -blogs={blogs} is prop being passed to component and stored as attrib
+    in props obj with its value(a list) being the value with key as variable name
+- can take out specific attribs of props object via:
+const BlogList = ({blogs, title}) => {  
+  - can use via "{title}" and {blogs.author}
+
+
+------------------------------------------------------------
+REUSING COMPONENTS
+
+const Home = () => {
+  const [blogs, setBlogs] = useState([
+    {title: 'My new website', body:'lorem ipsum...', author: 'Miguel', id: 1},
+    {title: 'First things first', body:'lorem ipsum...', author: 'Israel', id: 2},
+    {title: 'Web dev top tips', body:'lorem ipsum...', author: 'Miguel', id: 3},
+
+  ]);
+  return (
+    <div className="home">
+      <BlogList blogs={blogs} title='All Blogs!'/>
+      <BlogList blogs={blogs.filter((blog)=> blog.author === 'Miguel')} title="Miguel's Blogs"/>
+    </div>
+  );
+};
+- blogs.filter(): if condition failed, removes object from array;
+      returns new array after all objects tested which is then passed into component
+  - does not change the original array, only makes a new one with elems that pass condition
+------------------------------------------------------------
+FUNCTIONS AS PROPS
+
+dont want to define functions inside prop js files, define in Home js 
+  and pass the function as one of the props:
+
+const Home = () => {
+  const [blogs, setBlogs] = useState([
+    {title: 'My new website', body:'lorem ipsum...', author: 'Miguel', id: 1},
+    {title: 'First things first', body:'lorem ipsum...', author: 'Israel', id: 2},
+    {title: 'Web dev top tips', body:'lorem ipsum...', author: 'Miguel', id: 3},
+
+  ]);
+
+  const handleDelete = (id) =>{
+
+  }
+  return (
+    <div className="home">
+      <BlogList blogs={blogs} title='All Blogs!' handleDelete={handleDelete}/>
+    </div>
+  );
+};
+----------------
+const handleDelete = (id) => {
+  const newBlogs = blogs.filter((blog) => blog.id !== id);
+  setBlogs(newBlogs);
+};
+  - since .filter() doesnt change og array, need to use setState
+      function setBlogs from:
+        const [blogs, setBlogs] = useState([
+      to change the value of blogs object to equal the newBlogs object
+      so that only the filtered elems will be shown on page
+  
+------------------------------------------------------------
+USEEFFECT HOOK
+
+useEffect(): runs a function whenever page is rendered(intial render,
+  then another render when setState is changed via setBlogs to update page)
+
+in Home.js:
+import { useState, useEffect } from "react";
+
+useEffect(() =>{
+  console.log('useEffect ran!');
+  console.log(blogs);
+});
+  - if only  want useEffect() to run on intial render, add 2nd arg:
+   useEffect(() =>{
+    console.log('useEffect ran!');
+    console.log(blogs);
+  }, []);
+    - an empty array means it wont run after initial render even if state changes
+    - if want only run on intial and specific things changed, can put inside [] the variables like [blogs]
+
+------------------------------------------------------------
+USING JSON SERVER
+
+json server: json file that lets you use a fake RESTful api
+
+- in data/db.json:
+{
+    "blogs": [
+        {
+            "title": "My First Blog",
+            "body": "I was gonna take Zoey to the bayou to walk but it rained.",
+            "author": "Miguel",
+            "id": 1
+        },
+        {
+            "title": "My Last Project",
+            "body": "I'm learning React to use on my last project before I start working at Target if no jobs found.",
+            "author": "Leugim",
+            "id": 2
+        }        
+    ]
+}
+
+- in terminal can use npx to run from web instead of installing locally:
+npx json-server --watch data/db.json --port 8000
+  - json file can be seen at http://localhost:8000/blogs
+
+- makes its own endpoints to connect/do transfers with the data in db.json:
+/blogs        GET
+/blogs/{id}   GET
+/blogs        POST
+/blogs/{id}   DELETE
+
+------------------------------------------------------------
+FETCHING DATA WITH USEEFFECT
+
+in Home.js:
+const Home = () => {
+  const [blogs, setBlogs] = useState(null);
+
+  const handleDelete = (id) => {...};
+
+  useEffect(() => {
+    fetch("http://localhost:8000/blogs")
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setBlogs(data);
+      });
+  }, []);
+  return (
+    <div className="home">
+      {blogs && <BlogList blogs={blogs} title="All Blogs!" handleDelete={handleDelete} />}
+    </div>
+  );
+}, [];
+- fetch retrieves the response from the URL, not the actual data json object bc hasnt been fully processed
+- need to process response using .json() to read through and extract the json object you wanted from the URL and can pass it into another .then()
+  as the arg "data" or whatever name, the first param is the extracted json object
+- fetch and the .then()'s take time to execute, so cant pass blogs automatically to BlogsList.js for it to use .map()
+  bc it is initially null:   const [blogs, setBlogs] = useState(null);
+- need to use js conditional to only display BlogsList component/pass blogs as prop if blogs is not null:
+    {blogs && <BlogList blogs={blogs} title="All Blogs!" handleDelete={handleDelete} />}
+- bc useEffect() has setBlogs(data); and setBlogs() re-renders page which causes useEffect to run again,
+  can avoid infinite loop by using the 2nd useEffect arg as [], so that useEffect only ever runs once, at the initial page render
+
+------------------------------------------------------------
+CONDITIONAL LOADING MESSAGE
+
+const Home = () => {
+  const [blogs, setBlogs] = useState(null);
+  const [isPending, setIsPending] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/blogs")
+      .then((res) => {
+        console.log(res)
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setBlogs(data);
+        setIsPending(false);
+      });
+  }, []);
+  return (
+    <div className="home">
+      {isPending && <div>Loading...</div>}
+      {blogs && <BlogList blogs={blogs} title="All Blogs!"/>}
+    </div>
+  );
+};
+- want to put a placeholder content while fetch happening:
+  {isPending && <div>Loading...</div>}
+  - use useState for isPending component to be able to disappear
+    when blogs initialized
+  - since blogs is initialized inside useEffect, use setIsPending in same place
+    so that the isPengding content switches off and blogs content switches on
+
+
+------------------------------------------------------------
+HANDLING FETCH ERRORS
+
+const Home = () => {
+  const [blogs, setBlogs] = useState(null);
+  const [isPending, setIsPending] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/blogs")
+      .then((res) => {
+        if (!res.ok) {
+          throw Error("Could not fetch data for that resource");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setBlogs(data);
+        setIsPending(false);
+        setError(null);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setIsPending(false);
+      });
+  }, []);
+  return (
+    <div className="home">
+      {error && <div>{error}</div>}
+      {isPending && <div>Loading...</div>}
+      {blogs && <BlogList blogs={blogs} title="All Blogs!" />}
+    </div>
+  );
+};
+- want to show only error message if something wrong with connection:
+  {error && <div>{error}</div>}
+  and 
+  setError(err.message);
+  setIsPending(false);
+    - Loading... will be removed and error message will be shown instead
+- catch block originally only catches if connection failed, but want to also
+  display error msg if connection was successful but the response is messed up, so also include
+  if (!res.ok) {
+          throw Error("Could not fetch data for that resource");
+        }
+    - skips/"throws" all the way to catch block with Error object as the arg
+
+
+------------------------------------------------------------
+MAKING A CUSTOM HOOK
+
+want to be able to use in multiple places the code block:
+fetch("http://localhost:8000/blogs")
+.then((res) => {
+  if (!res.ok) {
+    throw Error("Could not fetch data for that resource");
+  }
+  return res.json();
+})
+.then((data) => {
+  console.log(data);
+  setBlogs(data);
+  setIsPending(false);
+  setError(null);
+})
+.catch((err) => {
+  setError(err.message);
+  setIsPending(false);
+});
+- can make custom hook and import it in each file we want to use this code
+
+in new file useFetch.js:
+import {useState, useEffect} from 'react';
+
+
+const usefetch = (url) =>{
+    const [data, setData] = useState(null);
+    const [isPending, setIsPending] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetch(url)
+          .then((res) => {
+            if (!res.ok) {
+              throw Error("Could not fetch data for that resource");
+            }
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+            setData(data);
+            setIsPending(false);
+            setError(null);
+          })
+          .catch((err) => {
+            setError(err.message);
+            setIsPending(false);
+          });
+      }, []);
+
+      return {data, isPending, error};
+}
+export default usefetch;
+- change setBlogs to setData to be able to use with other kinds of data
+- cut all related code and paste into usefetch function and export it at end of file
+- blogs(now data), isPending, and error are needed in Home.js, so return them in an object/array
+
+------------------------------------------------------------
+REACT ROUTER
+
+instead of doing requests to server for each html page visited in website,
+React only does 1 initial request which sends response w/index.html and
+every other file used
+- new requests for pages only go to react router which will update the DOM
+    with correct components instead of retrieving new html pages from a remote server
+- /, /contact, /about pages will be rendered into the DOM when requested    
+
+in App.js:
+import Navbar from "./Navbar";
+import Home from "./Home";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <Navbar />
+        <div className="content">
+          <Switch>
+            <Route path="/">
+              <Home />
+            </Route>
+          </Switch>
+        </div>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+- import react-dom to be able to use Router, Route, and Switch
+- enclose all content inside <Router>
+- inside <Switch> should only be the different pages, not anything shared
+    throughout whole website like the <NavBar>
+- each page you want website to have needs its own <Route> and path, since each page
+    has its own url on websites and content shown switches btwn corresponding pages/routes
+  
+
+------------------------------------------------------------
+EXACT PATH MATCHES
+
+made new Create component, try to set new route in App.js:
+<Switch>
+  <Route path="/">
+    <Home />
+  </Route>
+  <Route path="/create">
+    <Create />
+  </Route>
+</Switch>
+- doesnt work, only shows homepage because React searches Route's
+  top to bottom, considers "/" a close match to "/create" typed in address bar
+  and stops there
+- fix by adding "exact" keyword before each "path" so doesnt stop if not exact match:
+<Route exact path="/">
+<Route exact path="/create">
+
+
+
+------------------------------------------------------------
+ROUTER LINKS
+
+- React intercepts request to server when new page wanted and 
+  handles the content change in browser
+- address still changes to new page's url
+
+in Navbar.js:
+
+<a href="/">Home</a>
+<a href="/create" style={{
+    color: "#70870c"                    
+}}>New Blog</a>
+
+change a's and href's to:
+
+<Link to="/">Home</Link>
+<Link to="/create" style={{
+    color: "#70870c"                    
+}}>New Blog</Link>
+
+- problem: useEffect's fetch in Home.js is still running if page changed from home to /create quickly
+  - trying to get data for Home component, but in current page /create there is no Home component
+
+------------------------------------------------------------
+USEEFFECT CLEANUP
+
+- to fix problem of data trying to be fetched while changed to new page,
+    need to place and return cleanup function inside useFetch.js
+- returned cleanup function at end of useEffect is fired when Home.js 
+    is unmounted from DOM
+
+- put at end of useEffect:
+const useFetch = (url) => {
+  const [data, setData] = useState(null);
+  const [isPending, setIsPending] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const abortCont = new AbortController();
+
+    fetch(url, { signal: abortCont.signal })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error("Could not fetch data for that resource");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setData(data);
+        setIsPending(false);
+        setError(null);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log("fetch aborted");
+        } else {
+          setError(err.message);
+          setIsPending(false);
+        }
+      });
+
+    return () => abortCont.abort();
+  }, []);
+
+  return { data, isPending, error };
+};
+- need to connect an abort controller to the fetch:
+  const abortCont = new AbortController();
+  fetch(url, { signal: abortCont.signal })
+
+- error will still show in console so specify what to do if the error is from Abort and
+    make sure state isnt changed bc we want to abort the useFetch():
+      if (err.name === "AbortError") {
+        console.log("fetch aborted");
+      } else {
+        setError(err.message);
+        setIsPending(false);
+      }
+- abort the fetch:
+    return () => abortCont.abort();
+
+
+
+------------------------------------------------------------
+ROUTE PARAMETERS
+
+ex:
+/blogs/123
+- 123 is {id}
+
+make BlogDetails.js,
+
+in App.js:
+<Route exact path="/blogs/:id">
+  <BlogDetails />
+</Route>
+- now component will show  at address http://localhost:3000/blogs/<whatever number>
+- use ":id" in path to set up variable named 'id' to be used as url param
+
+-------------------
+
+- can use useParams() hook to use params from component's page's url as variable:
+import { useParams } from 'react-router-dom/cjs/react-router-dom.min';
+const BlogDetails = () => {
+    const {id} = useParams();
+
+  return (
+    <div className="blog-details">
+      <h2>Blog {id} Details</h2>
+    </div>
+  );
+};
+- now output is Blog 3 Details at .../blogs/3
+
+------------------------
+want to make BlogList into url's for the blog's details
+
+- in data/db.json:
+{
+    "blogs": [
+        {
+            "title": "My First Blog",
+            "body": "I was gonna take Zoey to the bayou to walk but it rained.",
+            "author": "Miguel",
+            "id": 1
+        },
+        {
+            "title": "My Last Project",
+            "body": "I'm learning React to use on my last project before I start working at Target if no jobs found.",
+            "author": "Leugim",
+            "id": 2
+        }        
+    ]
+}
+- each blog has "id" attrib, can use from BlogList to set up link to corresponding BlogDetails:
+
+in BlogList.js:
+
+const BlogList = ({blogs, title}) => {  
+ 
+
+  return (
+    <div className="blog-list">
+      <h1>{title}</h1>
+
+      {blogs.map((blog) => (
+        <div className="blog-preview" key={blog.id}>
+          <h2>{blog.title}</h2>
+          <p>Written by {blog.author}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+add Links and use {} to use js when setting url:
+const BlogList = ({ blogs, title }) => {
+  return (
+    <div className="blog-list">
+      <h1>{title}</h1>
+
+      {blogs.map((blog) => (
+        <div className="blog-preview" key={blog.id}>
+          <Link to={`/blogs/${blog.id}`}>
+            <h2>{blog.title}</h2>
+            <p>Written by {blog.author}</p>
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+};
+- to use variables inside to=, first put {} and inside can use
+    string literals `${variable}`:
+      {`/blogs/${blog.id}`}
+
+
+------------------------------------------------------------
+REUSING CUSTOM HOOKS
+
+useFetch hook returns 3 values:
+- data: blogs
+- isPending: bool
+- error if exists
+
+- use inside BlogDetails via:
+  const {data: blog, isPending, error} = useFetch('http://localhost:8000/blogs?id=' + id);
+  - can name variable instead of data as blogs:
+    {data: blogs, ...}
+
+const BlogDetails = () => {
+  const { id } = useParams();
+  console.log(id);
+  const {
+    data: blog,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/blogs?id=" + id);
+
+  return (
+    <div className="blog-details">
+      {isPending && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+      {blog && (
+        <article>
+          <h2>{blog[0].title}</h2>
+          <p>Written by {blog[0].author}</p>
+          <div className="blog-body">{blog[0].body}</div>
+        </article>
+      )}
+    </div>
+  );
+};
+- url is .../blogs/1 but fetch's url needs to be .../blogs?id=1
+- output is:
+My First Blog
+Written by Miguel
+I was gonna take Zoey to teh bayou to walk but it rained.
+
+------------------------------------------------------------
+CONTROLLED INPUTS (FORMS)
+
+controlled inputs: set up input field/form to track/store value 
+  via state
+
+in Create.js:
+const Create = () => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [author, setAuthor] = useState("Miguel");
+  
+
+  return (
+    <div className="create">
+      <h2>Add a New Blog</h2>
+      <form>
+        <label>Blog title:</label>
+        <input type="text" required value={title} onChange={(event) => setTitle(event.target.value)}/>
+        <label>Blog body:</label>
+        <textarea type="text" required value={body} onChange={(event) => setBody(event.target.value)}/>
+        <label>Blog author:</label>
+        <select value={author} onChange={(event) => setAuthor(event.target.value)}>
+          <option value="Miguel">Miguel</option>
+          <option value="Israel">Israel</option>
+        </select>
+        <button>Add Blog</button>
+        <p>{title}</p>
+        <p>{body}</p>
+        <p>{author}</p>
+      </form>
+    </div>
+  );
+}
+- use multiple useState's to keep track of multiple inputted values for variables
+- value: default value that appears in form, set to "" for no initial input
+- onChange: whenever user types something into form it triggers event with target.value being what was typed in
+
+------------------------------------------------------------
+CONTROLLED INPUTS (FORMS)
+
+
+const Create = () => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [author, setAuthor] = useState("Miguel");
+  
+
+
+  const handleSubmit = (event) =>{
+    event.preventDefault();
+    const blog = {title, body, author};
+    console.log(blog);
+  }
+  return (
+    <div className="create">
+      <h2>Add a New Blog</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Blog title:</label>
+        <input type="text" required value={title} onChange={(event) => setTitle(event.target.value)}/>
+        <label>Blog body:</label>
+        <textarea type="text" required value={body} onChange={(event) => setBody(event.target.value)}/>
+        <label>Blog author:</label>
+        <select value={author} onChange={(event) => setAuthor(event.target.value)}>
+          <option value="Miguel">Miguel</option>
+          <option value="Israel">Israel</option>
+        </select>
+        <button>Add Blog</button>
+        <p>{title}</p>
+        <p>{body}</p>
+        <p>{author}</p>
+      </form>
+    </div>
+  );
+};
+- use onChange to trigger handleSubmit function that collects inputs and puts in object of same
+    design as blog objects in data/db.json
+- use event.preventDefault(); to prevent page refreshing when input submitted
+
+
+------------------------------------------------------------
+MAKING POST REQUESTS
+
+const Create = () => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [author, setAuthor] = useState("Miguel");
+  const [isPending, setIsPending] = useState(false);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const blog = { title, body, author };
+    setIsPending(true)
+
+    // do POST inside here instead of useFetch.js bc POST only happens in one place
+    // in whole project
+    fetch("http://localhost:8000/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(blog),
+    }).then(() => {
+      console.log("new blog added");
+      setIsPending(false);
+    });
+  };
+  return (
+    <div className="create">
+      <h2>Add a New Blog</h2>
+      <form onSubmit={handleSubmit}>
+        <label>Blog title:</label>
+        <input
+          type="text"
+          required
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <label>Blog body:</label>
+        <textarea
+          type="text"
+          required
+          value={body}
+          onChange={(event) => setBody(event.target.value)}
+        />
+        <label>Blog author:</label>
+        <select
+          value={author}
+          onChange={(event) => setAuthor(event.target.value)}>
+          <option value="Miguel">Miguel</option>
+          <option value="Israel">Israel</option>
+        </select>
+        {!isPending && <button>Add Blog</button>}
+        {isPending && <button disabled>Adding Blog...</button>}
+        <p>{title}</p>
+        <p>{body}</p>
+        <p>{author}</p>
+      </form>
+    </div>
+  );
+};
+- do a fetch and set method/headers with blog object populated by inputted values
+- want to make submit button disabled while blog being posted, do conditional
+    and use useState 'isPending'
+
+------------------------------------------------------------
+PROGRAMMATIC REDIRECTS
+
+want to be redirected to home page after submitting new blog
+- use useHistory hook:
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
+const Create = () => {
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [author, setAuthor] = useState("Miguel");
+  const [isPending, setIsPending] = useState(false);
+  const history = useHistory();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const blog = { title, body, author };
+    setIsPending(true)
+
+    // do POST inside here instead of useFetch.js bc POST only happens in one place
+    // in whole project
+    fetch("http://localhost:8000/blogs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(blog),
+    }).then(() => {
+      setIsPending(false);
+      history.push('/');
+    });
+- history.go(-1) goes back one page, whatever page it was
+- history.push('/') goes to route with that url(Home.js)
+
+------------------------------------------------------------
+DELETING BLOGS
+
+in BlogDetails.js:
+const BlogDetails = () => {
+  const { id } = useParams();
+  console.log(id);
+  const history = useHistory();
+  const {
+    data: blog,
+    isPending,
+    error,
+  } = useFetch("http://localhost:8000/blogs?id=" + id);
+
+  const handleClick = () => {
+    fetch("http://localhost:8000/blogs/" + id, {
+      method: "DELETE",
+    }).then(() => {
+      history.push("/");
+    });
+  };
+
+  return (
+    <div className="blog-details">
+      {isPending && <div>Loading...</div>}
+      {error && <div>{error}</div>}
+      {blog && (
+        <article>
+          <h2>{blog[0].title}</h2>
+          <p>Written by {blog[0].author}</p>
+          <div className="blog-body">{blog[0].body}</div>
+          <button onClick={handleClick}>Delete</button>
+        </article>
+      )} 
+    </div>
+  );
+};
+- fetch url to delete is same as url to GET all blogs but with id added:
+  "http://localhost:8000/blogs/" + id
+  - NOT same as finding certain blog:
+    "http://localhost:8000/blogs?id=" + id
+
+------------------------------------------------------------
+404 PAGES    
+
+make new NotFound.js:
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import React from "react";
+const NotFound = () => {
+    return (
+        <div className="not-found">
+            <h2>Sorry</h2>
+            <p>That page cannot be found</p>
+            <Link to='/'>Back to homepage</Link>
+        </div>
+    );
+}
+ 
+export default NotFound;
+
+in App.js, need to add Route to catch all other Routes not listed:
+<Route path="*">
+  <NotFound />
+</Route>
+- * means all other possible routes not listed
+- needs to be the last <Route> in <Switch>
