@@ -9,8 +9,8 @@ A json file in /airline-reservation/backend named ```credentials.json``` is need
 * user
 * password
 
-Then, open one terminal in /airline-reservation/backend to run the database using:
+Then, open one terminal in ```airline-reservation/backend``` to run the database using:  
 ```node db.js```
 
-Finally, open another terminal in /airline-reservation to run the app using:
+Finally, open another terminal in ```airline-reservation``` to run the app using:  
 ```npm run start```
