@@ -1,18 +1,22 @@
-import useFetch from "./useFetch";
 import Search from "./Search";
-import Results from "./Results";
+import Status from "./Status";
 import React from "react";
 
 const Home = () => {
   const destination = false;
   return (
     <div className="home">
-      {!destination && (
-        <Search
-          title="Available Destinations (HOU, ORD, JFK, LAX, MIA)"
-          description="Discover new experiences"
-        />
-      )}
+      <div className="search-section">
+        {!destination && (
+          <Search
+            title="Available Destinations (HOU, ORD, JFK, LAX, MIA)"
+            description="Discover new experiences"
+          />
+        )}
+      </div>
+      <div className="status-section">
+        <Status />
+      </div>
     </div>
   );
 };

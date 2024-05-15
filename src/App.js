@@ -3,7 +3,6 @@ import Home from "./components/Home.js";
 import Create from "./components/Create.js";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Results from "./components/Results.js";
 import NotFound from "./components/NotFound.js";
 import AllFlights from "./components/AllFlights.js";
 
@@ -19,9 +18,6 @@ function App() {
             </Route>
             <Route exact path="/create">
               <Create />
-            </Route>
-            <Route exact path="/results/:destination">
-              <Results />
             </Route>
             <Route exact path="/all-flights">
               <AllFlights />

@@ -6,6 +6,11 @@ const useFetch = (url) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // if no url submitted yet(ex: first time loading page), don't do anything and set pending to false
+    if (!url) {
+      setIsPending(false);
+      return;
+    }
     setIsPending(true);
     const abortCont = new AbortController();
     let stillMounted = true;
