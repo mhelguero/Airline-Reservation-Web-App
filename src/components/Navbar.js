@@ -7,7 +7,7 @@ const Navbar = () => {
             <Link to='/'><h1>Rocket Airlines</h1></Link>
             <div className="links">
                 <Link to="/">Home</Link>                
-                <Link to="/all-flights">View Flight</Link>
+                <Link to="/all-flights">View Flights</Link>
                 {/* <Link>Flight Status</Link> */}
             </div>
         </nav>
