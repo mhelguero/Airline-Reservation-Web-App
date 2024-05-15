@@ -6,30 +6,40 @@ const useFetch = (url) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    setIsPending(true);
     const abortCont = new AbortController();
+    let stillMounted = true;
 
     fetch(url, { signal: abortCont.signal })
-      .then((res) => {
-        if (!res.ok) {
+      .then((response) => {
+        if (!response.ok) {
           throw Error("Could not fetch data for that resource");
         }
-        return res.json();
+        return response.json();
       })
-      .then((data) => {
-        setData(data);
-        setIsPending(false);
-        setError(null);
+      .then((responseData) => {
+        // prevent memory leak if component unmounted while fetch still pending
+        if (stillMounted) {
+          setData(responseData);
+          setIsPending(false);
+          setError(null);
+        }
       })
       .catch((err) => {
-        if (err.name === "AbortError") {
-          console.log("fetch aborted");
-        } else {
-          setError(err.message);
-          setIsPending(false);
+        if (stillMounted) {
+          if (err.name === "AbortError") {
+            console.log("fetch aborted");
+          } else {
+            setError(err.message);
+            setIsPending(false);
+          }
         }
       });
 
-    return () => abortCont.abort();
+    return () => {
+      stillMounted = false;
+      abortCont.abort();
+    };
   }, [url]);
 
   return { data, isPending, error };
