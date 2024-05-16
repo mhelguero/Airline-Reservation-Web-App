@@ -1,6 +1,7 @@
 import React from "react";
 import useFetch from "./useFetch";
 import { useState, useEffect } from "react";
+import DisplayFlights from "./DisplayFlights";
 
 const Search = ({ title, description }) => {
   const [destination, setDestination] = useState("");
@@ -29,25 +30,7 @@ const Search = ({ title, description }) => {
       </form>
       {isPending && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
-      {flights && (
-        <div>
-          <h2>Results</h2>
-          <ul>
-            {Object.keys(flights).map((outerKey) => (
-              <li key={outerKey}>
-                <strong>{outerKey}</strong>
-                <ul>
-                  {Object.keys(flights[outerKey]).map((innerKey) => (
-                    <li key={innerKey}>
-                      {innerKey}: {flights[outerKey][innerKey]}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {flights && <DisplayFlights title="Results" flights={flights} />}
     </div>
   );
 };

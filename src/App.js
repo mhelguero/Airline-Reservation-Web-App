@@ -1,6 +1,7 @@
 import Navbar from "./components/Navbar.js";
 import Home from "./components/Home.js";
 import Create from "./components/Create.js";
+import BookFlight from "./components/BookFlight.js";
 import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import NotFound from "./components/NotFound.js";
@@ -21,6 +22,9 @@ function App() {
             </Route>
             <Route exact path="/all-flights">
               <AllFlights />
+            </Route>
+            <Route exact path="/book-flight/:flight_id">
+              <BookFlight />
             </Route>
             <Route path="*">
               <NotFound />

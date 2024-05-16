@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import DisplayFlights from "./DisplayFlights";
 import useFetch from "./useFetch";
 
 function AllFlights() {
@@ -8,30 +9,12 @@ function AllFlights() {
     error,
   } = useFetch("http://localhost:4000/all-flights");
 
-
   return (
     <div className="allFlights">
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
-      {flights && (
-        <div className="allFlights">
-          <h1>Flight List</h1>
-          <ul>
-            {Object.keys(flights).map((outerKey) => (
-              <li key={outerKey}>
-                <strong>{outerKey}</strong>
-                <ul>
-                  {Object.keys(flights[outerKey]).map((innerKey) => (
-                    <li key={innerKey}>
-                      {innerKey}: {flights[outerKey][innerKey]}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {flights && <DisplayFlights title="All Flights" flights={flights} />}
+
     </div>
   );
 }

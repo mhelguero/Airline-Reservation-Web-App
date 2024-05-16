@@ -59,7 +59,7 @@ app.get("/search", (req, res) => {
 // Flights Status
 app.get("/status", (req, res) => {
   connection.query(
-    "SELECT flight_no, scheduled_departure, scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights",
+    "SELECT flight_id, flight_no, scheduled_departure, scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights",
     (err, results) => {
       if (err) {
         console.error("Error querying database: ", err);
