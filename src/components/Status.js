@@ -1,4 +1,5 @@
 import useFetch from "./useFetch";
+import DisplayFlights from "./DisplayFlights";
 import React from "react";
 
 const Status = () => {
@@ -14,21 +15,7 @@ const Status = () => {
       {isPending && <div>Loading...</div>}
       {flights && (
         <div className="allFlights">
-          <h1>Current Flights Status</h1>
-          <ul>
-            {Object.keys(flights).map((outerKey) => (
-              <li key={outerKey}>
-                <strong>{outerKey}</strong>
-                <ul>
-                  {Object.keys(flights[outerKey]).map((innerKey) => (
-                    <li key={innerKey}>
-                      {innerKey}: {flights[outerKey][innerKey]}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
+          <DisplayFlights title="Flights Status" flights={flights} />
         </div>
       )}
     </div>
