@@ -30,7 +30,7 @@ const Search = ({ title, description }) => {
       </form>
       {isPending && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
-      {flights && <DisplayFlights title="Results" flights={flights} />}
+      {flights && <DisplayFlights isBookedFlight={false} title="Results" flights={flights} />}
     </div>
   );
 };

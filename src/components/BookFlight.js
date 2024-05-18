@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";
 import useFetch from "./useFetch";
 import DisplayFlights from "./DisplayFlights";
@@ -19,8 +19,8 @@ const BookFlight = () => {
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {flight && (
-        <DisplayFlights title="Flight Number " flights={flight} isBooking="true" />
-      )}
+          <DisplayFlights isBookedFlight={true} title="Flight Number " flights={flight} />
+        )}
 
       <BookingForms flight={flight}/>
     </div>

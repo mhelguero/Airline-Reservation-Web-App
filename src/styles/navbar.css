@@ -1,0 +1,36 @@
+/* navbar */
+.navbar {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+    border-bottom: 1px solid #f2f2f2;
+  }
+  .navbar h1 {
+    color: #3f75d3;
+    font-size: 40px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 5rem;
+  }
+  .navbar .links {
+    margin-left: auto;
+    margin-right: 20rem;
+    font-size: 25px;
+    font-weight: bolder;
+    font-family: Calibri, Cochin, Georgia, Times, 'Times New Roman', serif; 
+  }
+  
+  .navbar a{
+    text-decoration: none;
+  }
+  
+  .navbar .links a {  
+    margin-left: 26px;
+    padding: 6px;
+  }
+  
+  .navbar .links a:hover {
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 10px;
+  }
