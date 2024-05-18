@@ -30,7 +30,8 @@ app.listen(port, () => {
 
 // All Flights
 app.get("/all-flights", (req, res) => {
-  connection.query("SELECT * FROM flights", (err, results) => {
+  const query = `SELECT * FROM flights;`;
+  connection.query(query, (err, results) => {
     if (err) {
       console.error("Error querying database: ", err);
       res.status(500).json({ error: "Database error" });
@@ -43,58 +44,42 @@ app.get("/all-flights", (req, res) => {
 // Searched Flights
 app.get("/search", (req, res) => {
   const destination = req.query.destination;
-  connection.query(
-    "SELECT * FROM flights WHERE arrival_airport = '" + destination + "';",
-    (err, results) => {
-      if (err) {
-        console.error("Error doing search query: ", err);
-        res.status(500).json({ error: "Database error" });
-        return;
-      }
-      res.json(results);
+  const query = `SELECT * FROM flights WHERE arrival_airport = ?;`;
+  connection.query(query, destination, (err, results) => {
+    if (err) {
+      console.error("Error doing search query: ", err);
+      res.status(500).json({ error: "Database error" });
+      return;
     }
-  );
+    res.json(results);
+  });
 });
 
 // Flights Status
 app.get("/status", (req, res) => {
-  connection.query(
-    "SELECT flight_id, flight_no, scheduled_departure, scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights",
-    (err, results) => {
-      if (err) {
-        console.error("Error querying database: ", err);
-        res.status(500).json({ error: "Database error" });
-        return;
-      }
-      res.json(results);
+  const query =
+    "SELECT flight_id, flight_no, scheduled_departure, scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights;";
+  connection.query(query, (err, results) => {
+    if (err) {
+      console.error("Error querying database: ", err);
+      res.status(500).json({ error: "Database error" });
+      return;
     }
-  );
+    res.json(results);
+  });
 });
 
 // getting info for specific flight
 app.get("/flight", (req, res) => {
   const flight_id = req.query.flight_id;
-  connection.query(
-    `
-    SELECT
-      flight_no, 
-      DATE_FORMAT(scheduled_departure, '%M %e') AS scheduled_departure_date, 
-      TIME_FORMAT(scheduled_departure, '%H:%i') AS scheduled_departure_time, 
-      TIME_FORMAT(scheduled_arrival, '%H:%i') AS scheduled_arrival_time, 
-      TIME_FORMAT(TIMEDIFF(scheduled_arrival, scheduled_departure), '%lh %im') AS flight_duration, 
-      first_class_seats_available, 
-      economy_seats_available 
-    FROM flights 
-    WHERE flight_id = ${flight_id};
-    `,
-    (err, results) => {
-      if (err) {
-        console.error("Error doing search query: ", err);
-        res.status(500).json({ error: "Database error" });
-        return;
-      }
-      res.json(results);
-    }
-  );
-});
+  const query = 'SELECT flight_no, DATE_FORMAT(scheduled_departure, "%M %e") AS scheduled_departure_date, TIME_FORMAT(scheduled_departure, "%H:%i") AS scheduled_departure_time, TIME_FORMAT(scheduled_arrival, "%H:%i") AS scheduled_arrival_time, TIME_FORMAT(TIMEDIFF(scheduled_arrival, scheduled_departure), "%lh %im") AS flight_duration, first_class_seats_available,economy_seats_available FROM flights  WHERE flight_id = ?';
 
+  connection.query(query, flight_id, (err, results) => {
+    if (err) {
+      console.error("Error doing search query: ", err);
+      res.status(500).json({ error: "Database error" });
+      return;
+    }
+    res.json(results);
+  });
+});

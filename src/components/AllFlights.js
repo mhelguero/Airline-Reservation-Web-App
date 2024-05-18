@@ -13,7 +13,7 @@ function AllFlights() {
     <div className="allFlights">
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
-      {flights && <DisplayFlights title="All Flights" flights={flights} />}
+      {flights && <DisplayFlights isBookedFlight={false} title="All Flights" flights={flights} />}
 
     </div>
   );

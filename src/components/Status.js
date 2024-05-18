@@ -9,13 +9,15 @@ const Status = () => {
     error,
   } = useFetch("http://localhost:4000/status");
 
+  const flightsArray = Array.isArray(flights) ? flights : [flights];
+
   return (
     <div className="status">
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {flights && (
         <div className="allFlights">
-          <DisplayFlights title="Flights Status" flights={flights} />
+          <DisplayFlights title="Flights Status" flights={flightsArray} />
         </div>
       )}
     </div>

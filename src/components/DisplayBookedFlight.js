@@ -1,8 +1,10 @@
 import React from "react";
-const DisplayBookedFlight = ({ flight }) => {
+const DisplayBookedFlight = ({ title, flight }) => {
+  if (flight) console.log(flight);
   return (
     <div className="booked-flight-display">
-      {Object.keys(flight).map((outerKey) => (
+      {flight &&
+       Object.keys(flight).map((outerKey) => (
         <li key={outerKey}>
           <strong>{outerKey}</strong>
           <ul>
@@ -13,7 +15,8 @@ const DisplayBookedFlight = ({ flight }) => {
             ))}
           </ul>
         </li>
-      ))}
+      ))
+    }
     </div>
   );
 };
