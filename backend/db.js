@@ -70,3 +70,31 @@ app.get("/status", (req, res) => {
     }
   );
 });
+
+// getting info for specific flight
+app.get("/flight", (req, res) => {
+  const flight_id = req.query.flight_id;
+  connection.query(
+    `
+    SELECT
+      flight_no, 
+      DATE_FORMAT(scheduled_departure, '%M %e') AS scheduled_departure_date, 
+      TIME_FORMAT(scheduled_departure, '%H:%i') AS scheduled_departure_time, 
+      TIME_FORMAT(scheduled_arrival, '%H:%i') AS scheduled_arrival_time, 
+      TIME_FORMAT(TIMEDIFF(scheduled_arrival, scheduled_departure), '%lh %im') AS flight_duration, 
+      first_class_seats_available, 
+      economy_seats_available 
+    FROM flights 
+    WHERE flight_id = ${flight_id};
+    `,
+    (err, results) => {
+      if (err) {
+        console.error("Error doing search query: ", err);
+        res.status(500).json({ error: "Database error" });
+        return;
+      }
+      res.json(results);
+    }
+  );
+});
+
