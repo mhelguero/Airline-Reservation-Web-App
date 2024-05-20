@@ -1,8 +1,39 @@
 /* home */
-.home{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.home {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem !important;
+  
+}
+
+.search-section{
+  background-color: #1b3249;
+  width: 100%;  
+}
+
+
+.search-form {
+  background-color: #1b3249;
+  padding: 20px;
+  border-radius: 10px;   
+}
+.destination-input {
+  border: 2px solid #1d284e;
+  margin-left: .5rem;
+  margin-right: 1rem;
+}
+.search-form .btn {
+  background-color: rgb(28, 124, 22);
+  border: none;
+  font-weight: bold;
+}
+
+
+
+
+/* status section */
+.all-flights{
+}

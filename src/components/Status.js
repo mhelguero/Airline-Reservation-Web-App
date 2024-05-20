@@ -16,7 +16,7 @@ const Status = () => {
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {flights && (
-        <div className="allFlights">
+        <div className="all-flights">
           <DisplayFlights title="Flights Status" flights={flightsArray} />
         </div>
       )}
