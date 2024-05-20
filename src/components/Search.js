@@ -21,16 +21,40 @@ const Search = ({ title, description }) => {
   };
 
   return (
-    <div className="search">
+    <div className="container mt-5">
       <h1>{title}</h1>
-      <form action="/search" method="get" onSubmit={handleSubmit}>
-        <h3>{description}</h3>
-        <input type="text" name="destination" placeholder="Search..." />
-        <button type="submit">Search</button>
+      <form
+        action="/search"
+        method="get"
+        onSubmit={handleSubmit}
+        class="search-form">
+        <div className="mb-4">
+          <h3>{description}</h3>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="destination" class="form-label">
+            Destination:
+          </label>
+          <input
+            type="text"
+            name="destination"
+            placeholder="Search..."
+            class="destination-input"
+          />
+          <button class="btn btn-primary" type="submit">
+            Search
+          </button>
+        </div>
       </form>
       {isPending && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
-      {flights && <DisplayFlights isBookedFlight={false} title="Results" flights={flights} />}
+      {flights && (
+        <DisplayFlights
+          isBookedFlight={false}
+          title="Results"
+          flights={flights}
+        />
+      )}
     </div>
   );
 };

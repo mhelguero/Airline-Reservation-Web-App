@@ -4,11 +4,16 @@
     display: flex;
     align-items: center;
     max-width: 100%;
-    margin: 0 auto;
-    border-bottom: 1px solid #f2f2f2;
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;    
+    border-bottom: 1px solid #4b4a4a;
+    background-color: #141d35;
+    z-index: 100;
   }
   .navbar h1 {
-    color: #3f75d3;
+    color: #fff;
     font-size: 40px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin-left: 5rem;
@@ -23,6 +28,8 @@
   
   .navbar a{
     text-decoration: none;
+    color: #fff !important;
+
   }
   
   .navbar .links a {  

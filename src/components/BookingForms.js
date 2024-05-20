@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import DisplayBookingForms from "./DisplayBookingForms"
+import DisplayBookingForms from "./DisplayBookingForms";
+import SeatSelection from "./SeatSelection";
+
 const BookingForms = ({ flight }) => {
   const parameters = ["name", "phoneNumber", "email", "cardNumber"];
-  const [selectedSeats, setSelectedSeats] = useState(1);
-  const [boardingPasses, setBoardingPasses] = useState([]);
-
-  const handleSeatChange = (e) => {
-    setSelectedSeats(parseInt(e.target.value));
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,27 +16,14 @@ const BookingForms = ({ flight }) => {
   };
   return (
     <div className="booking-forms">
-      {/* input forms */}
       <form onSubmit={handleSubmit}>
+        {/* input forms */}
         <DisplayBookingForms parameters={parameters} />
-      </form>
 
-      {/* seat selection */}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="seatSelect">Select Number of Seats:</label>
-        <select
-          id="seatSelect"
-          value={selectedSeats}
-          onChange={handleSeatChange}>
-          {flight &&
-            [...Array(flight[0].economy_seats_available).keys()].map((seat) => (
-              <option key={seat + 1} value={seat + 1}>
-                {seat + 1}
-              </option>
-            ))}
-        </select>
-        <button type="submit">Book Seats</button>
+        {/* dropdown menu for seats */}
+        <SeatSelection flight={flight} />
       </form>
+      <button type="submit">Book Seats</button>
     </div>
   );
 };

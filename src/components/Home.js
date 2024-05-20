@@ -9,8 +9,8 @@ const Home = () => {
       <div className="search-section">
         {!destination && (
           <Search
-            title="Available Destinations (HOU, ORD, JFK, LAX, MIA)"
-            description="Discover new experiences"
+            title="Discover new experiences"
+            description="Available Destinations (HOU, ORD, JFK, LAX, MIA)"
           />
         )}
       </div>
