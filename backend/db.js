@@ -58,7 +58,7 @@ app.get("/search", (req, res) => {
 // Flights Status
 app.get("/status", (req, res) => {
   const query =
-    "SELECT flight_id, flight_no, scheduled_departure, scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights;";
+    "SELECT flight_id, flight_no, TIME_FORMAT(scheduled_departure, '%H:%m') AS scheduled_departure, TIME_FORMAT(scheduled_arrival, '%H:%m') AS scheduled_arrival, departure_airport, arrival_airport, flight_status FROM flights;";
   connection.query(query, (err, results) => {
     if (err) {
       console.error("Error querying database: ", err);

@@ -1,0 +1,38 @@
+.table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.black-row {
+  background-color: #000;
+  color: #fff;
+}
+
+.gray-row {
+  background-color: #838282;
+  color: #000;
+}
+
+.Scheduled {
+  background-color: green;
+  color: white;
+  border-bottom: 2px #838282;
+  text-align: center;
+}
+
+.Delayed {
+  background-color: orange;
+  color: white;
+}
+
+.Cancelled {
+  background-color: red;
+  color: white;
+}
