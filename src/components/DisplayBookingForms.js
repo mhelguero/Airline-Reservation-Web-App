@@ -8,7 +8,13 @@ const DisplayBookingForms = ({ parameters }) => {
         email: "",
         cardNumber: "",
       });
-
+      
+    const labels = {
+      name: "Full Name",
+      phoneNumber: "Phone Number",
+      email: "Email",
+      cardNumber: "Credit Card Number"
+    }
       const handleChange = (event) => {
         const { name, value } = event.target;
         setInputData({
@@ -28,8 +34,8 @@ const DisplayBookingForms = ({ parameters }) => {
       };
   return <div className="display-booking-forms">
     {parameters.map((parameter) =>(
-        <div key={parameter} className="booking-form">
-          <label htmlFor={parameter}>{parameter}: </label>
+        <div key={parameter} className="form-group">
+          <label htmlFor={parameter} className="form-label">{labels[parameter]}: </label>
           <input
             type={parameter==='name' || parameter==='cardNumber' ? 'text':
                 parameter==='phoneNumber' ? 'tel':'email'
@@ -38,6 +44,7 @@ const DisplayBookingForms = ({ parameters }) => {
             name={parameter}
             value={inputData[parameter]}
             onChange={handleChange}
+            className="form-control"
             required
           />
         </div>

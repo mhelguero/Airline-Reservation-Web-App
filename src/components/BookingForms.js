@@ -15,7 +15,7 @@ const BookingForms = ({ flight }) => {
     // });
   };
   return (
-    <div className="booking-forms">
+    <div className="booking-forms mt-4">
       <form onSubmit={handleSubmit}>
         {/* input forms */}
         <DisplayBookingForms parameters={parameters} />
@@ -23,7 +23,7 @@ const BookingForms = ({ flight }) => {
         {/* dropdown menu for seats */}
         <SeatSelection flight={flight} />
       </form>
-      <button className="btn btn-primary" type="submit">Book Seats</button>
+      <button className="btn btn-primary mt-3" type="submit">Book Seats</button>
     </div>
   );
 };

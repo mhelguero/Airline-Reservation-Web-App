@@ -39,3 +39,7 @@ body{
   background-color: #141d35;
   overflow: hidden;
 }
+
+.black-text{
+  color: black;
+}
