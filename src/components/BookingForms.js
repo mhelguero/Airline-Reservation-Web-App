@@ -23,7 +23,7 @@ const BookingForms = ({ flight }) => {
         {/* dropdown menu for seats */}
         <SeatSelection flight={flight} />
       </form>
-      <button type="submit">Book Seats</button>
+      <button className="btn btn-primary" type="submit">Book Seats</button>
     </div>
   );
 };
