@@ -8,10 +8,7 @@ const DisplayBookingForms = ({ parameters }) => {
         email: "",
         cardNumber: "",
       });
-    
 
-    
- 
       const handleChange = (event) => {
         const { name, value } = event.target;
         setInputData({

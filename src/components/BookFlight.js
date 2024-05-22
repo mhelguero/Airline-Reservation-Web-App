@@ -14,8 +14,6 @@ const BookFlight = () => {
 
   return (
     <div className="book-flight">
-      {/* TODO: Make table with departure date, departure time, 
-          arrival time, flight duration, 1st class seats available, economy seats available */}
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
       {flight && (

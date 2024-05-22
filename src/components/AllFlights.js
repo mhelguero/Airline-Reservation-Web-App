@@ -10,10 +10,10 @@ function AllFlights() {
   } = useFetch("http://localhost:4000/all-flights");
 
   return (
-    <div className="allFlights">
+    <div className="all-flights">
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
-      {flights && <DisplayFlights isBookedFlight={false} title="All Flights" flights={flights} />}
+      {flights && <DisplayFlights  title="All Flights" flights={flights} />}
 
     </div>
   );
