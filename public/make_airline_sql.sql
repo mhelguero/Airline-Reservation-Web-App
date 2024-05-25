@@ -75,11 +75,11 @@ CREATE TABLE booked_seats (
 CREATE TABLE customer (
     passenger_id INT AUTO_INCREMENT,
     passenger_name VARCHAR(50) NOT NULL,
-    phone_no char(10) NOT NULL,
+    phone_no char(12) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    boarding_no INT NOT NULL,
+    boarding_no VARCHAR(20) NOT NULL,
     card_no VARCHAR(16) NOT NULL,
-    boarded VARCHAR(3) NOT NULL,
+    boarded BOOLEAN NOT NULL,
     PRIMARY KEY (passenger_id)  
 );
 
